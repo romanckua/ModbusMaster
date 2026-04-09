@@ -46,6 +46,7 @@ ModbusMaster::ModbusMaster(void)
   _idle = 0;
   _preTransmission = 0;
   _postTransmission = 0;
+  _u16ResponseTimeout = ku16MBDefaultTimeout; // Ініціалізація тайм-ауту
 }
 
 /**
@@ -70,6 +71,15 @@ void ModbusMaster::begin(uint8_t slave, Stream &serial)
   pinMode(__MODBUSMASTER_DEBUG_PIN_A__, OUTPUT);
   pinMode(__MODBUSMASTER_DEBUG_PIN_B__, OUTPUT);
 #endif
+}
+
+/**
+Встановлює тайм-аут очікування відповіді від slave-пристрою.
+@param timeout Час очікування в мілісекундах
+*/
+void ModbusMaster::setTimeout(uint16_t timeout)
+{
+  _u16ResponseTimeout = timeout;
 }
 
 
@@ -797,7 +807,7 @@ uint8_t ModbusMaster::ModbusMasterTransaction(uint8_t u8MBFunction)
           break;
       }
     }
-    if ((millis() - u32StartTime) > ku16MBResponseTimeout)
+    if ((millis() - u32StartTime) > _u16ResponseTimeout)
     {
       u8MBStatus = ku8MBResponseTimedOut;
     }

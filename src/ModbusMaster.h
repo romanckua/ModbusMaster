@@ -75,6 +75,7 @@ class ModbusMaster
     void idle(void (*)());
     void preTransmission(void (*)());
     void postTransmission(void (*)());
+	void setTimeout(uint16_t timeout);
 
     // Modbus exception codes
     /**
@@ -249,7 +250,8 @@ class ModbusMaster
     static const uint8_t ku8MBReadWriteMultipleRegisters = 0x17; ///< Modbus function 0x17 Read Write Multiple Registers
     
     // Modbus timeout [milliseconds]
-    static const uint16_t ku16MBResponseTimeout          = 2000; ///< Modbus timeout [milliseconds]
+   static const uint16_t ku16MBDefaultTimeout            = 100; ///< Modbus timeout [milliseconds]
+   uint16_t _u16ResponseTimeout;
     
     // master function that conducts Modbus transactions
     uint8_t ModbusMasterTransaction(uint8_t u8MBFunction);
