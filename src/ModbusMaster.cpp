@@ -593,6 +593,32 @@ uint8_t ModbusMaster::readWriteMultipleRegisters(uint16_t u16ReadAddress,
 }
 
 
+/**
+Modbus function 0x08 Diagnostics.
+
+@param u16SubFunction Код підфункції (наприклад, 0x0000 для ехо, 0x0001 для ребуту)
+@param u16Data Дані для підфункції
+@return 0 на успіх; номер помилки на збій
+*/
+uint8_t ModbusMaster::diagnostics(uint16_t u16SubFunction, uint16_t u16Data)
+{
+  _u16WriteAddress = u16SubFunction; 
+  _u16WriteQty = u16Data;            
+  return ModbusMasterTransaction(ku8MBDiagnostics);
+}
+
+/**
+Хелпер для ребуту зв'язку пристрою (Sub-function 0x0001).
+
+@param bClearLog true - очистити журнал подій, false - залишити
+@return 0 на успіх; номер помилки на збій
+*/
+uint8_t ModbusMaster::restartCommunications(bool bClearLog)
+{
+  uint16_t u16Data = bClearLog ? 0xFF00 : 0x0000;
+  return diagnostics(0x0001, u16Data);
+}
+
 /* _____PRIVATE FUNCTIONS____________________________________________________ */
 /**
 Modbus transaction engine.
@@ -624,6 +650,7 @@ uint8_t ModbusMaster::ModbusMasterTransaction(uint8_t u8MBFunction)
   switch(u8MBFunction)
   {
     case ku8MBReadCoils:
+	case ku8MBDiagnostics:
     case ku8MBReadDiscreteInputs:
     case ku8MBReadInputRegisters:
     case ku8MBReadHoldingRegisters:
@@ -638,6 +665,7 @@ uint8_t ModbusMaster::ModbusMasterTransaction(uint8_t u8MBFunction)
   switch(u8MBFunction)
   {
     case ku8MBWriteSingleCoil:
+	case ku8MBDiagnostics:
     case ku8MBMaskWriteRegister:
     case ku8MBWriteMultipleCoils:
     case ku8MBWriteSingleRegister:

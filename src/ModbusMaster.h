@@ -217,6 +217,9 @@ class ModbusMaster
     uint8_t  maskWriteRegister(uint16_t, uint16_t, uint16_t);
     uint8_t  readWriteMultipleRegisters(uint16_t, uint16_t, uint16_t, uint16_t);
     uint8_t  readWriteMultipleRegisters(uint16_t, uint16_t);
+	// --- НОВІ МЕТОДИ ДЛЯ ДІАГНОСТИКИ (Функція 0x08) ---
+    uint8_t  diagnostics(uint16_t u16SubFunction, uint16_t u16Data);
+    uint8_t  restartCommunications(bool bClearLog = false);
     
   private:
     Stream* _serial;                                             ///< reference to serial port object
@@ -240,6 +243,7 @@ class ModbusMaster
     static const uint8_t ku8MBReadDiscreteInputs         = 0x02; ///< Modbus function 0x02 Read Discrete Inputs
     static const uint8_t ku8MBWriteSingleCoil            = 0x05; ///< Modbus function 0x05 Write Single Coil
     static const uint8_t ku8MBWriteMultipleCoils         = 0x0F; ///< Modbus function 0x0F Write Multiple Coils
+	static const uint8_t ku8MBDiagnostics                = 0x08; ///< Modbus function 0x08 Diagnostics
 
     // Modbus function codes for 16 bit access
     static const uint8_t ku8MBReadHoldingRegisters       = 0x03; ///< Modbus function 0x03 Read Holding Registers
