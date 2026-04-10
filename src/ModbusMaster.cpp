@@ -650,8 +650,7 @@ uint8_t ModbusMaster::ModbusMasterTransaction(uint8_t u8MBFunction)
   switch(u8MBFunction)
   {
     case ku8MBReadCoils:
-	case ku8MBDiagnostics:
-    case ku8MBReadDiscreteInputs:
+	case ku8MBReadDiscreteInputs:
     case ku8MBReadInputRegisters:
     case ku8MBReadHoldingRegisters:
     case ku8MBReadWriteMultipleRegisters:
@@ -679,6 +678,7 @@ uint8_t ModbusMaster::ModbusMasterTransaction(uint8_t u8MBFunction)
   switch(u8MBFunction)
   {
     case ku8MBWriteSingleCoil:
+	case ku8MBDiagnostics:
       u8ModbusADU[u8ModbusADUSize++] = highByte(_u16WriteQty);
       u8ModbusADU[u8ModbusADUSize++] = lowByte(_u16WriteQty);
       break;
